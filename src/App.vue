@@ -1,14 +1,14 @@
 <script setup>
 import { ref, toValue } from 'vue';
 const menus = ref([
-  { id: 1 ,name:"珍珠奶茶",detail:"香濃奶茶搭配QQ珍珠",price: 50,stock:20,isEditing: false },
-  { id: 2,name:"冬瓜檸檬",detail:"清新冬瓜配上新鮮檸檬",price: 45,stock:18,isEditing: false },
-  { id: 3,name:"翡翠檸檬",detail:"綠茶與檸檬的完美結合",price: 55,stock:34, isEditing: false },
-  { id: 4,name:"四季春茶",detail:"香醇四季春茶，回甘無比",price: 45,stock:10, isEditing: false },
-  { id: 5,name:"阿薩姆奶茶",detail:"阿薩姆紅茶搭配香醇鮮奶",price: 50,stock:25, isEditing: false },
-  { id: 6,name:"檸檬冰茶",detail:"檸檬與冰茶的清新組合",price: 45,stock:25,isEditing: false },
-  { id: 7,name:"芒果綠茶",detail:"芒果與綠茶的獨特風味",price: 55,stock:18, isEditing: false },
-  { id: 8,name:"抹茶拿鐵",detail:"抹茶與鮮奶的絕配",price: 60,stock:20,isEditing: false }
+  { id: 1 ,name:"珍珠奶茶",detail:"香濃奶茶搭配QQ珍珠",price: 50,stock:20},
+  { id: 2,name:"冬瓜檸檬",detail:"清新冬瓜配上新鮮檸檬",price: 45,stock:18},
+  { id: 3,name:"翡翠檸檬",detail:"綠茶與檸檬的完美結合",price: 55,stock:34},
+  { id: 4,name:"四季春茶",detail:"香醇四季春茶，回甘無比",price: 45,stock:10,},
+  { id: 5,name:"阿薩姆奶茶",detail:"阿薩姆紅茶搭配香醇鮮奶",price: 50,stock:25 },
+  { id: 6,name:"檸檬冰茶",detail:"檸檬與冰茶的清新組合",price: 45,stock:25},
+  { id: 7,name:"芒果綠茶",detail:"芒果與綠茶的獨特風味",price: 55,stock:18},
+  { id: 8,name:"抹茶拿鐵",detail:"抹茶與鮮奶的絕配",price: 60,stock:20}
 ]);
 const add = (menu) => {
     menu.stock++;
@@ -20,9 +20,14 @@ const minus = (menu) => {
         alert("庫存不足");
     }
 };
-
+const editid= ref(null);
 const edit = (item) => {
-    item.isEditing = !item.isEditing;
+  if (editid.value === item.id) {
+    editid.value = null;
+  }else {
+    editid.value = item.id;
+  }
+    
 };
 
 
@@ -40,7 +45,7 @@ const edit = (item) => {
   </thead>
   <tbody>
     <tr v-for ="menu in menus" :key="menu.id">
-      <td v-if="menu.isEditing">
+      <td v-if="editid === menu.id">
         <input type="text" v-model="menu.name"/>
       </td>
       <td v-else>{{ menu.name }}</td>
@@ -52,8 +57,8 @@ const edit = (item) => {
         <button type="button" @click="add(menu)">+</button>
       </td>
       <td>
-        <button class="edit-btn" type="button" title="修改" @click="edit(menu)" >
-          {{ menu.isEditing ? '✅':'✏️' }}
+        <button  class="edit-btn" type="button" :title=" editid === menu.id ? '取消' :'修改'" @click="edit(menu)" >
+          {{ editid === menu.id ? '❌' : '✏️' }}
         </button>
       </td>
     </tr>
